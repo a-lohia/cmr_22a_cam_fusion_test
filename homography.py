@@ -6,13 +6,17 @@ from Calibration.calibration import undistort_image
 
 # runs the cv2 calibration matrix on the image
 # in this case it will calculate the matrix based on the data every time and then apply, 
-# but can be optimized to only run calibration once
-# left = undistort_image(cv2.imread("Left.jpg"))
-# right = undistort_image(cv2.flip(cv2.imread("Right.jpg"), -1))
+# but can be optimized to only run calibration onc
 
-# No calibration of the camera frames before combining
-left = cv2.imread("Left.jpg")
-right = cv2.flip(cv2.imread("Right.jpg"), -1)
+left = undistort_image(cv2.imread("Left.jpg"))
+right = undistort_image(cv2.flip(cv2.imread("Right.jpg"), 1))
+
+# # No calibration of the camera frames before combining
+# left = cv2.imread("Left.jpg")
+# right = cv2.flip(cv2.imread("Right.jpg"), 1)
+
+cv2.imshow("right", right)
+cv2.imshow("left", left)
 
 
 matches, locs1, locs2 = matchPics(left, right)
