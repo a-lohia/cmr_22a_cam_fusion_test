@@ -23,12 +23,13 @@ def undistort_image(img):
     return dst
 
 def calibrate():
+    SQUARE_SIZE = 1 # mm
     # termination criteria
     criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     objp = np.zeros((10*7,3), np.float32)
-    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2)
+    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2) * SQUARE_SIZE
     # Arrays to store object points and image points from all the images.
     objpoints = [] # 3d point in real world space
     imgpoints = [] # 2d points in image plane.
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     objp = np.zeros((10*7,3), np.float32)
-    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2)
+    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2) * 22
     # Arrays to store object points and image points from all the images.
     objpoints = [] # 3d point in real world space
     imgpoints = [] # 2d points in image plane.
@@ -80,7 +81,7 @@ if __name__ == "__main__":
             # Draw and display the corners
             cv.drawChessboardCorners(img, (10,7), corners2, ret)
             cv.imshow('img', img)
-            cv.waitKey(500)
+            cv.waitKey(1)
 
     cv.destroyAllWindows()
 
