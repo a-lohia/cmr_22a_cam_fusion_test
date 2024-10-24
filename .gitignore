@@ -1,1 +1,2 @@
-/Calibration/Data/*.jpg
+/Calibration/Data
+!/Calibration/Data/README.md
