@@ -30,7 +30,7 @@ def matchPics(I1, I2):
 	print("number of descriptors is ", len(desc1))
 
 	#Match features using the descriptors
-	matches = briefMatch(desc1, desc2, ratio=0.65)
+	matches = briefMatch(desc1, desc2, ratio=.8)
 	print("number of matches is ", len(matches))
 
 	return matches, locs1, locs2
