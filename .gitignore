@@ -1,3 +1,7 @@
-/Calibration/Data/*.jpg
-.vscode
-.env/
+Calibration/Data/*.jpg
+.vscode/*
+.env/*
+Calibration/Data/.DS_Store
+Calibration/Data/Right/.DS_Store
+Calibration/.DS_Store
+__pycache__/
