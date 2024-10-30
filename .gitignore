@@ -1,4 +1,6 @@
 Calibration/Data/*.jpg
+Calibration/Data/Left/
+Calibration/Data/Right/
 .vscode/*
 .env/
 Calibration/Data/.DS_Store
