@@ -27,7 +27,7 @@ matches, locs1, locs2 = matchPics(left, right)
 x1 = np.fliplr(locs1[matches[:, 0]])
 x2 = np.fliplr(locs2[matches[:, 1]])
 
-# plotMatches(left, right, matches, locs1, locs2)
+plotMatches(left, right, matches, locs1, locs2)
 
 # taking Right to Left
 H, _ = cv2.findHomography(x2, x1, method=cv2.RANSAC)
@@ -47,6 +47,8 @@ print(warped_cover.shape)
 # warped_cover[warped_cover!=0] = (warped_cover[warped_cover!=0] + left[warped_cover!=0]) / 2
 # warped_cover[warped_cover==0] = left[warped_cover==0]
 
+
+cv2.imwrite("homography_result.jpg", warped_cover)
 cv2.imshow(" ", warped_cover)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
