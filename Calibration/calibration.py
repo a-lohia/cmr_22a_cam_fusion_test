@@ -7,7 +7,8 @@ def undistort_image(img):
     ret, mtx, dist, rvecs, tvecs = calibrate()
 
     h,  w = img.shape[:2]
-    newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+    
+    newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 0, (w,h))
 
     # ---
     # METHOD 1 
@@ -20,6 +21,8 @@ def undistort_image(img):
     dst = dst[y:y+h, x:x+w]
     # cv.imwrite('calibresult.png', dst)
 
+    print(dst.shape)
+
     return dst
 
 def calibrate():
@@ -29,12 +32,12 @@ def calibrate():
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     objp = np.zeros((10*7,3), np.float32)
-    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2) * SQUARE_SIZE
+    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2) # * SQUARE_SIZE
     # Arrays to store object points and image points from all the images.
     objpoints = [] # 3d point in real world space
     imgpoints = [] # 2d points in image plane.
-    images = glob.glob('Calibration/Data/*.jpg')
-    print(images)
+    images = glob.glob('Calibration/Data/Right/*.jpg')
+    # print(images)
     for fname in images:
         img = cv.imread(fname)
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -64,11 +67,11 @@ if __name__ == "__main__":
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     objp = np.zeros((10*7,3), np.float32)
-    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2) * 22
+    objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2)
     # Arrays to store object points and image points from all the images.
     objpoints = [] # 3d point in real world space
     imgpoints = [] # 2d points in image plane.
-    images = glob.glob('Data/*.jpg')
+    images = glob.glob('Calibration/Data/Right/*.jpg')
     for fname in images:
         img = cv.imread(fname)
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -77,7 +80,7 @@ if __name__ == "__main__":
         # If found, add object points, image points (after refining them)
         if ret == True:
             objpoints.append(objp)
-            corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
+            corners2 = cv.cornerSubPix(gray,corners, (11, 11), (-1,-1), criteria)
             imgpoints.append(corners2)
             # Draw and display the corners
             cv.drawChessboardCorners(img, (10,7), corners2, ret)
@@ -85,19 +88,22 @@ if __name__ == "__main__":
             cv.waitKey(1)
 
     cv.destroyAllWindows()
-
+    # ret, mtx, dist, rvecs, tvecs = calibrate()
     ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
 
     # Undistortion Methods from https://docs.opencv.org/3.4/dc/dbb/tutorial_py_calibration.html
 
-    img = cv.imread('Data/Qtcam_24_10_11:18_24_23-1.jpg')
+    timestamp = "24_10_26:13_49_54"
+    img = cv.imread(f'Calibration/Data/Right/Qtcam_{timestamp}-1.jpg')
+    # img = cv.imread('Calibration/Data/Right/Qtcam_24_10_24:15-59-29-1.jpg')
 
     # import pdb
     # pdb.set_trace()
 
-    h,  w = img.shape[:2]
-    newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+    h, w = img.shape[:2]
+    print(h, w)
+    newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 0, (w,h))
 
     # ---
     # METHOD 1 
@@ -108,7 +114,7 @@ if __name__ == "__main__":
     # crop the image
     x, y, w, h = roi
     dst = dst[y:y+h, x:x+w]
-    cv.imwrite('calibresult.png', dst)
+    # # cv.imwrite('calibresult.png', dst)
 
     # # ---
     # # METHOD 2
@@ -121,6 +127,11 @@ if __name__ == "__main__":
     # x, y, w, h = roi
     # dst = dst[y:y+h, x:x+w]
     # cv.imwrite('calibresult.png', dst)
+
+    cv.imshow("img", img)
+    cv.imshow("calib", dst)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 
     # mean_error = 0
